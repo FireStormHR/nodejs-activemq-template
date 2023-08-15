@@ -1,0 +1,52 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "node16",
+    "lib": [
+      "ES2022",
+    ],
+    "moduleResolution": "node16",
+    "rootDir": "src",
+    "baseUrl": "src",
+    "outDir": "build",
+    "paths": {
+      "#src/*": [
+        "./*"
+      ],
+      "#core/*": [
+        "./core/*"
+      ],
+      "#models/*": [
+        "./models/*"
+      ],
+      "#transformations/*": [
+        "./transformations/*"
+      ]
+    },
+    "incremental": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "types": [
+      "node",
+      "jest"
+    ],
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
+    "importHelpers": true,
+    "alwaysStrict": true,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "noImplicitOverride": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+}

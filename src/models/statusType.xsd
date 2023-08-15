@@ -1,0 +1,74 @@
+<xs:schema
+ attributeFormDefault="unqualified"
+ elementFormDefault="qualified"
+ xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:element name="status" type="statusType"/>
+
+	<xs:complexType name="statusType">
+		<xs:sequence>
+			<xs:element name="succes" minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Het status van het bericht of het verzoek is mislukt of gelukt</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration  value="true"/>
+						<xs:enumeration  value="false"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="foutmelding" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Een algemene foutmelding met daarbij een applicatiespecifieke foutmelding</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="foutomschrijving" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Een algemene foutomschrijving met daarbij een applicatiespecifieke foutomschrijving</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="procestrail" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Afgelopen pad van doorlopen subflows tot aan de error</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="component" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Op welke mule component is de exception opgetreden</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="identifier" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>hoe is het mule component te indentificeren</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="failingComponent" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>waar in de service is de de exception opgetreden</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="failingComponentNaamInFlow" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Hoe heet het component in de flow</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="exceptionType" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>wat is de exception type</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="actuelePayload" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>payload ten tijden van het optreden van de fout</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="laatsteResponseBericht" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>laatste response bericht ten tijden van het optreden van de fout</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

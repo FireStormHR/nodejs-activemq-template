@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema elementFormDefault="qualified"
+ xmlns="http://www.wetterskipfryslan.nl/algemeen"
+ targetNamespace="http://www.wetterskipfryslan.nl/algemeen"
+ xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:element name="verwerkenErpxMutatieVerzoek">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="eventHeader" type="eventHeaderType"/>
+				<xs:element name="eventPayload" type="eventPayloadType" minOccurs="0"/>
+			</xs:sequence>
+
+			<xs:attribute name="versie" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+    <xs:simpleType name="eventNaamEnumType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="crediteurMutatie"/>
+            <xs:enumeration value="debiteurMutatie"/>
+            <xs:enumeration value="bestelBevestiging"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+	<!-- Vanaf hier de typeDefs -->
+	<xs:complexType name="eventHeaderType">
+		<xs:sequence>
+			<xs:element name="eventNaam" type="eventNaamEnumType">
+				<xs:annotation>
+					<xs:documentation>waarde is bijvoorbeeld debiteurMutatie, crediteurMutatie</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="tijdstip" type="xs:dateTime"/>
+			<xs:element name="mutatieSoort" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>opvoeren of wijzigen</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="producent" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>naam van het werkproces, de applicatie of het systeem waaruit de wijziging komt</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="onderwerp" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>op welk onderwerp (bedrijfsonderwerp, applicatieobject, gegevensentiteit, systeemonderdeel, sensor) heeft deze wijziging betrekking</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="sleutelAttribuut" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>attribuut dat de technische sleutel van de entiteit bevat waarop deze wijziging betrekking heeft.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="sleutelWaarde" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>key value van de instance van de entiteit waarop deze wijziging betrekking heeft. Kan gebruikt worden om aanvullende, verrijkende informatie via een api op te halen bij de applicatie die de wijziging geproduceerd heeft .</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="eventPayloadType">
+		<xs:sequence>
+			<xs:element name="wasData" type="wasWordType" minOccurs="0"/>
+			<xs:element name="wordtData" type="wasWordType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="wasWordType">
+		<xs:sequence>
+			<xs:any namespace="##any" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

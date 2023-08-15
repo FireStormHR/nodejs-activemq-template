@@ -1,0 +1,23 @@
+{
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "endOfLine": "crlf",
+  "tabWidth": 2,
+  "semi": true,
+  "printWidth": 250,
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "proseWrap": "preserve",
+  "quoteProps": "as-needed",
+  "overrides": [
+    {
+      "files": [
+        "*.ts",
+        "*.mts"
+      ],
+      "options": {
+        "parser": "typescript"
+      }
+    }
+  ]
+}

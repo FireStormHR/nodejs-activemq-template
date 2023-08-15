@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema elementFormDefault="qualified"
+ xmlns="http://www.wetterskipfryslan.nl/algemeen"
+ targetNamespace="http://www.wetterskipfryslan.nl/algemeen"
+ xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:include schemaLocation="statusType.xsd"/>
+
+	<!-- Start met onze eigen header voor synchrone berichten -->
+	<xs:element name="verwerkenErpxMutatieFout">
+        <xs:annotation>
+            <xs:documentation>
+                Alle exception handler fouten
+            </xs:documentation>
+        </xs:annotation>
+
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="status" type="statusType"/>
+				<xs:element name="berichtInhoud" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+
+			<xs:attribute name="versie" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+    </xs:element>
+
+</xs:schema>

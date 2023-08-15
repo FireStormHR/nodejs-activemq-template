@@ -1,0 +1,60 @@
+{
+  "name": "service-verwerken-erpx-mutatie",
+  "version": "0.0.0",
+  "description": "",
+  "type": "module",
+  "author": "integratieTeam",
+  "engines": {
+    "node": ">= 18.12"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "lodash": "^4.17.21",
+    "monet": "^0.9.3",
+    "rhea-promise": "^3.0.1",
+    "rxjs": "^7.8.1",
+    "tslib": "^2.6",
+    "ws": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^28.1.8",
+    "@types/lodash": "^4.14.196",
+    "@types/node": "^18.15.5",
+    "@types/ws": "^8.5.5",
+    "@typescript-eslint/eslint-plugin": "^6.2",
+    "@typescript-eslint/parser": "^6.2",
+    "copyfiles": "^2.4.1",
+    "eslint": "^8.46",
+    "eslint-config-prettier": "^8.9",
+    "eslint-plugin-jest": "^27.2",
+    "eslint-plugin-prettier": "^5.0.0",
+    "jest": "^29.6",
+    "prettier": "^3.0",
+    "rimraf": "^5.0",
+    "ts-api-utils": "^1.0",
+    "ts-jest": "^29.1",
+    "tsc-watch": "^6.0.4",
+    "typescript": "^5.0.2"
+  },
+  "scripts": {
+    "startdev": "tsc-watch --noClear --onSuccess \"node build/index.js\"",
+    "start": "node build/index.js",
+    "clean": "rimraf coverage build tmp tsconfig.tsbuildinfo",
+    "copy-files": "copyfiles -all -e ./src/**/*.ts -f ./src/* build",
+    "build": "tsc",
+    "build:prd": "tsc -p tsconfig.prd.json",
+    "build:watch": "tsc -w",
+    "clean-build": "npm run clean && npm run build && npm run copy-files",
+    "clean-build:prd": "npm run clean && npm run build:prd && npm run copy-files",
+    "lint": "eslint . --ext .ts",
+    "prettier": "prettier --config .prettierrc --write .",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
+  },
+  "imports": {
+    "#src/*": "./build/*",
+    "#core/*": "./build/core/*",
+    "#models/*": "./build/models/*",
+    "#transformations/*": "./build/transformations/*"
+  }
+}

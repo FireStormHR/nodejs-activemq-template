@@ -3,9 +3,12 @@ import { createOpenConnectionAmqp } from '#core/network-comms/amqp-connection.js
 import { createOpenReceiverAmqp, createReceiverEventsObservable } from '#core/network-comms/amqp-receive.js';
 import { ConnectionOptions, ReceiverOptions } from 'rhea-promise';
 import { logSub } from '#core/library-utilities/rxjs-test-observer-template.js';
-import { take, takeWhile } from 'rxjs';
-import { Validation } from 'monet';
+import { Subject, map, switchMap, take, takeWhile } from 'rxjs';
 // import {} from '#core/network-comms/amqp-send.js';
+import type { Validation } from 'monet';
+import monetPkg from 'monet';
+
+const { Validation: ValidationCreator } = monetPkg;
 
 greeter('input').then((x) => {
   console.log(`Result: ${x}`);
@@ -31,6 +34,17 @@ const receiverOptions: ReceiverOptions = {
 
 const { connectionObservable, closeConnectionSubject } = createOpenConnectionAmqp(connectionOptions, true);
 
+const closeReceiver = (closeReceiverSubject: Subject<void>) => {
+  console.log('Closing receiver and connection');
+
+  closeReceiverSubject
+    .asObservable()
+    .pipe(take(1))
+    .subscribe({ complete: () => closeConnectionSubject.next() });
+
+  closeReceiverSubject.next();
+};
+
 // open connection
 connectionObservable.subscribe(
   logSub('connection-open', {
@@ -49,21 +63,14 @@ connectionObservable.subscribe(
                 next: (context) => {
                   console.log(`Received message: ${context.message}`);
 
-                  const val: Validation<number, string> = context.message?.body !== 'sluiten maar' ? Validation.Success(context.message?.body) : Validation.Fail(404);
+                  let val: Validation<number, string> = context.message?.body !== 'sluiten maar' ? ValidationCreator.Success(context.message?.body) : ValidationCreator.Fail(404);
 
-                  val.map((msg) => 'Converted!');
+                  val = val.map((msg) => "Converted because value wasnt 'sluiten maar'!");
 
                   console.log('validation value: ', val.isSuccess() ? val.success() : val.fail());
                 },
                 complete: () => {
-                  console.log('Closing receiver and connection');
-
-                  closeReceiverSubject
-                    .asObservable()
-                    .pipe(take(1))
-                    .subscribe({ complete: () => closeConnectionSubject.next() });
-
-                  closeReceiverSubject.next();
+                  closeReceiver(closeReceiverSubject);
                 },
               })
             );
@@ -73,3 +80,33 @@ connectionObservable.subscribe(
     },
   })
 );
+
+// Alternate implementation
+
+// connectionObservable
+//   .pipe(
+//     // open receiver
+//     switchMap((openConn) => createOpenReceiverAmqp(openConn, receiverOptions, true)),
+//     switchMap(({ openReceiver, closeReceiverSubject }) => createReceiverEventsObservable(openReceiver).pipe(map((context) => ({ closeReceiverSubject, context })))),
+//     takeWhile(({ closeReceiverSubject, context }) => new RegExp('sluiten maar').test(context?.message?.body ?? '') === false, true)
+//   )
+//   // listen to receiver
+//   .subscribe(
+//     logSub('receiver-event-listener', {
+//       next: ({ closeReceiverSubject, context }) => {
+//         console.log(`Received message: ${context.message}`);
+
+//         let val: Validation<number, string> = context.message?.body !== 'sluiten maar' ? ValidationCreator.Success(context.message?.body) : ValidationCreator.Fail(404);
+
+//         val = val.map((msg) => "Converted because value wasnt 'sluiten maar'!");
+
+//         val = val.failMap((num) => {
+//           closeReceiver(closeReceiverSubject);
+
+//           return num;
+//         });
+
+//         console.log('validation value: ', val.isSuccess() ? val.success() : val.fail());
+//       },
+//     })
+//   );
